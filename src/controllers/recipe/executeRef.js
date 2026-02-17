@@ -12,7 +12,6 @@ import { runRecipe } from "../../models/recipe/execute.js";
 export async function post(req, res) {
   const type = req.body?.type;
   const recipeUri = req.body?.recipe;
-  const feature = req.body?.feature; // reserved for future use
 
   if (type !== "recipe-ref") {
     return res
@@ -29,7 +28,7 @@ export async function post(req, res) {
   const engine = req.app.locals.engine;
 
   let recipe;
-  
+
   try {
     const response = await fetch(recipeUri, {
       headers: { accept: "application/json" },
@@ -61,9 +60,17 @@ export async function post(req, res) {
       .json({ error: "Recipe document is not a JSON object." });
   }
 
-  const variables = recipe.variables || {};
+  // first variables from request body, then from recipe document, default to empty object
+  const variables = req.body?.variables || recipe?.variables || {}; 
 
-  const content = await runRecipe(recipe, variables, engine);
-
-  res.status(200).json(content);
+  await runRecipe(recipe, variables, engine, function (err, content) {
+    if (err) {
+      res
+        .status(err.httpCode)
+        .json({ code: err.code, description: err.description });
+      return;
+    }
+    
+    res.status(200).json(content);
+  });
 }

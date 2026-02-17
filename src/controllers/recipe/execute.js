@@ -18,7 +18,7 @@ export async function post(req, res) {
       .json({ error: "Invalid recipe type. Expected 'recipe'." });
   }
 
-  const content = await runRecipe(recipe, {}, engine);
-
-  res.status(200).json(content);
+  await runRecipe(recipe, {}, engine, function (err, content) {
+    res.status(200).json(content);
+  });
 }
