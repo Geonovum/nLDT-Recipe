@@ -157,6 +157,9 @@
       ]
     }
   },
+  "variables": {
+    "magicNumber": 42
+  },
   "processing": [
     {
       "id": "processing1",
