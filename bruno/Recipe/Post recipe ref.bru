@@ -1,0 +1,26 @@
+meta {
+  name: Post recipe ref
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{serviceHost}}/executeref
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "type": "recipe-ref",
+    "recipe": "https://raw.githubusercontent.com/Geonovum/nLDT-Recipe/refs/heads/main/examples/json/calculate.json",
+    "variables": {
+      "magicNumber": 42
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
