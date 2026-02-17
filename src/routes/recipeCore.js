@@ -5,6 +5,18 @@ import { get as getLandingPage } from "../controllers/common/core/landingPage.js
 import { get as getConformance } from "../controllers/common/core/conformance.js";
 import { get as getAPI }         from "../controllers/common/core/api.js";
 
+/**
+ * Core API routes (landing, conformance, API description).
+ *
+ * GET /
+ * Landing page.
+ *
+ * GET /conformance
+ * OGC conformance classes.
+ *
+ * GET /api, GET /api.:ext
+ * API description (JSON or other format via extension).
+ */
 const router = express.Router();
 
 router.get("/", asyncHandler(getLandingPage));

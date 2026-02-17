@@ -1,3 +1,10 @@
+/**
+ * POST /recipe/execute
+ *
+ * Executes a recipe by running each of its processes sequentially.
+ * Each process is run through the engine, and terminal results are collected
+ * into a content object keyed by process ID. Returns the aggregated results.
+ */
 export async function post(req, res) {
   const recipe = req.body;
   const engine = req.app.locals.engine;
@@ -6,9 +13,10 @@ export async function post(req, res) {
   console.log(`Title ${recipe.title}`);
   console.log(`Description ${recipe.description}`);
 
+  // Accumulate terminal results from each process (keyed by process ID)
   const content = {};
 
-  var processing = recipe.processing;
+  const processing = recipe.processing;
   for (const process of processing) {
     console.log("═".repeat(50));
     console.log(`Running ${process.id}`);

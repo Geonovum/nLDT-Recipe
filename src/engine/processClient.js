@@ -1,14 +1,20 @@
 import fetch from "node-fetch";
 import { callbackRegistry } from "./callbackRegistry.js";
 
+/** Converts [{ id, value }, ...] into { id: value, ... } */
 function normalize(outputsArray) {
   const out = {};
   for (const o of outputsArray) out[o.id] = o.value;
   return out;
 }
 
+/**
+ * Client that executes a single node by POSTing to its execution URL.
+ * Supports sync (immediate response) and async (202 + polling or callback) modes.
+ */
 export class ProcessClient {
 
+  /** Executes the node; returns normalized outputs. Uses callback when subscriber present, else polls. */
   async execute(node) {
     const mode = node.execution?.mode || "sync";
     const executionUrl = `${node.link.href}/execution`;
@@ -24,7 +30,7 @@ export class ProcessClient {
       body: JSON.stringify(body),
     });
 
-    // SYNC
+    // Sync mode: wait for immediate JSON response
     if (mode === "sync") {
       if (!response.ok) throw new Error(await response.text());
       const json = await response.json();
@@ -32,7 +38,7 @@ export class ProcessClient {
       return normalize(json.outputs);
     }
 
-    // ASYNC
+    // Async mode: expect 202, then either wait for callback or poll
     if (response.status !== 202)
       throw new Error(`Expected 202, got ${response.status}`);
 
@@ -41,14 +47,16 @@ export class ProcessClient {
 
     const jobId = location.split("/").pop();
 
+    // Subscriber present: external system will call our callback; wait for it
     if (body.subscriber) {
-      var aa = await callbackRegistry.waitFor(jobId);
-      return normalize(aa.outputs);
+      const data = await callbackRegistry.waitFor(jobId);
+      return normalize(data.outputs);
     }
 
     return this.poll(location);
   }
 
+  /** Polls jobUrl until the job completes, fails, or is cancelled. */
   async poll(jobUrl, interval = 500) {
     while (true) {
       await new Promise((r) => setTimeout(r, interval));

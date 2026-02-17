@@ -4,6 +4,11 @@ import {
   getTerminalNodes,
 } from "./dependencyResolver.js";
 
+/**
+ * Executes a DAG of nodes in topological order. Nodes with no dependencies run first;
+ * once a node completes, dependents become ready. Results are passed via input references
+ * (:nodeId.outputs.outputName). Returns all results plus a subset of terminal (leaf) results.
+ */
 export class DagEngine {
   constructor(processClient) {
     this.processClient = processClient;
@@ -12,8 +17,8 @@ export class DagEngine {
   async execute(_nodes) {
     const results = {};
     const nodes = new Map();
-    const dependencies = new Map();
-    const dependents = new Map();
+    const dependencies = new Map();  // node id -> set of node ids it depends on
+    const dependents = new Map();    // node id -> set of node ids that depend on it
 
     for (const node of _nodes) {
       nodes.set(node.id, node);
@@ -27,6 +32,7 @@ export class DagEngine {
       }
     }
 
+    // Nodes with no unmet dependencies are ready to execute
     const ready = [...nodes.keys()].filter(
       (id) => dependencies.get(id).size === 0,
     );
@@ -37,6 +43,7 @@ export class DagEngine {
       const batch = [...ready];
       ready.length = 0;
 
+      // Execute ready nodes in parallel; each completion may unblock dependents
       await Promise.all(
         batch.map(async (id) => {
           const node = nodes.get(id);

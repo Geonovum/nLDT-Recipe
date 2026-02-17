@@ -1,3 +1,7 @@
+/**
+ * Extracts node IDs that this node depends on via input references.
+ * Inputs use the format ":nodeId.outputs.outputName" to reference outputs from other nodes.
+ */
 export function extractDependencies(node) {
   const deps = new Set();
 
@@ -12,6 +16,10 @@ export function extractDependencies(node) {
   return [...deps];
 }
 
+/**
+ * Replaces input references (":nodeId.outputs.outputName") with actual values from results.
+ * Throws if a referenced dependency has not been computed yet.
+ */
 export function resolveInputs(node, results) {
   const resolved = structuredClone(node.body);
   resolved.inputs = {};
@@ -32,6 +40,10 @@ export function resolveInputs(node, results) {
   return resolved;
 }
 
+/**
+ * Returns node IDs that are not referenced as inputs by any other node.
+ * These are the "leaf" nodes whose outputs are the final results of the DAG.
+ */
 export function getTerminalNodes(nodes) {
   const referenced = new Set();
 
