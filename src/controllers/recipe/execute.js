@@ -11,14 +11,16 @@ export async function post(req, res) {
   const recipe = req.body;
   const engine = req.app.locals.engine;
 
-    const type = recipe.type;
-    if (type !== "recipe") {
+  const type = recipe.type;
+  if (type !== "recipe") {
     return res
       .status(400)
       .json({ error: "Invalid recipe type. Expected 'recipe'." });
   }
 
-  await runRecipe(recipe, {}, engine, function (err, content) {
+  const variables = req.body?.variables || {};
+
+  await runRecipe(recipe, variables, engine, function (err, content) {
     res.status(200).json(content);
   });
 }

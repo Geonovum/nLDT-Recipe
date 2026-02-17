@@ -170,6 +170,9 @@ body:json {
         ]
       }
     },
+    "variables": {
+      "magicNumber": 42
+    },
     "processing": [
       {
         "id": "processing1",
@@ -183,10 +186,7 @@ body:json {
               "rel": "process",
               "title": "add",
               "type": "application/process+json",
-              "href": "http://192.168.2.124:8080/geonovum/v1/processes/add?bbox{}"
-            },
-            "execution": {
-              "mode": "sync"
+              "href": "http://192.168.2.124:8080/geonovum/v1/processes/add"
             },
             "body": {
               "inputs": {
@@ -259,7 +259,7 @@ body:json {
             "body": {
               "inputs": {
                 "number1": ":step2b.outputs.product",
-                "number2": "!variables.magicNumber"
+                "number2": "$magicNumber"
               },
               "outputs": {
                 "product": {
@@ -271,9 +271,9 @@ body:json {
         ],
   
         "subscriber": {
-          "successUri": "http://192.168.2.124:8081/geonovum/v1/callback/:jobId?type=success",
-          "inProgressUri": "http://192.168.2.124:8081/geonovum/v1/callback/:jobId?type=inProgress",
-          "failedUri": "http://192.168.2.124:8081/geonovum/v1/callback/:jobId?type=failed"
+          "successUri": ":serviceUrl/callback/:jobId?type=success",
+          "inProgressUri": ":serviceUrl/callback/:jobId?type=inProgress",
+          "failedUri": ":serviceUrl/callback/:jobId?type=failed"
         }
       }
     ]
