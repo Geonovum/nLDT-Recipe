@@ -243,7 +243,7 @@
           "body": {
             "inputs": {
               "number1": ":step2b.outputs.product",
-              "number2": "!variables.magicNumber"
+              "number2": "$variables.magicNumber"
             },
             "outputs": {
               "product": {
