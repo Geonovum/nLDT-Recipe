@@ -158,7 +158,13 @@
     }
   },
   "variables": {
-    "magicNumber": 42
+    "magicNumber": 42,
+    "magicLink": {
+      "rel": "process",
+      "title": "multiply",
+      "type": "application/process+json",
+      "href": "http://192.168.2.124:8080/geonovum/v1/processes/multiply"
+    }
   },
   "processing": [
     {
@@ -189,12 +195,7 @@
         },
         {
           "id": "step2a",
-          "link": {
-            "rel": "process",
-            "title": "multiply",
-            "type": "application/process+json",
-            "href": "http://192.168.2.124:8080/geonovum/v1/processes/multiply"
-          },
+          "link": "$magicLink",
           "body": {
             "inputs": {
               "number1": ":step1.outputs.sum",

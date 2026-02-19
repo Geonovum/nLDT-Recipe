@@ -1,3 +1,36 @@
+// substitute variables in the recipe
+function changeValue(obj, variables) {
+  if (typeof obj === "object") {
+    // iterating over the object using for..in
+    for (var keys in obj) {
+      //checking if the current value is an object itself
+      if (typeof obj[keys] === "object") {
+        // if so then again calling the same function
+        changeValue(obj[keys], variables);
+      } else {
+        var inputValue = obj[keys];
+        if (
+          typeof inputValue === "string" &&
+          (inputValue.startsWith("$") || inputValue.startsWith("!"))
+        ) {
+          const variableName = inputValue.slice(1); // Remove $ prefix
+          if (variables.hasOwnProperty(variableName)) {
+            obj[keys] = variables[variableName];
+            console.log(
+              `Substituted variable ${inputValue} with value ${variables[variableName]} in node ${obj[keys]}`,
+            );
+          } else {
+            console.warn(
+              `Variable ${variableName} not found for substitution in node ${obj[keys]}`,
+            );
+          }
+        }
+      }
+    }
+    return obj;
+  }
+}
+
 export async function runRecipe(recipe, variables, engine, callback) {
   console.log(`Recipe Id ${recipe.id}`);
   console.log(`Title ${recipe.title}`);
@@ -5,36 +38,8 @@ export async function runRecipe(recipe, variables, engine, callback) {
 
   // substitute variables in the recipe
   for (const process of recipe.processing) {
-    var nodes = process.nodes;
     for (const node of process.nodes) {
-      var inputs = node.body.inputs;
-
-      for (const [inputName, inputValue] of Object.entries(inputs)) {
-        if (
-          typeof inputValue === "string" &&
-          (inputValue.startsWith("$") || inputValue.startsWith("!"))
-        ) {
-          const variableName = inputValue.slice(1); // Remove $ prefix
-          if (variables.hasOwnProperty(variableName)) {
-            node.body.inputs[inputName] = variables[variableName];
-            console.log(
-              `Substituted variable ${inputValue} with value ${variables[variableName]} in node ${node.id}`,
-            );
-          } else {
-            console.warn(
-              `Variable ${variableName} not found for substitution in node ${node.id}`,
-            );
-            return callback(
-              {
-                httpCode: 400,
-                code: `Variable not found`,
-                description: `Variable ${variableName} not found for substitution in node ${node.id}`,
-              },
-              undefined,
-            );
-          }
-        }
-      }
+      changeValue(node, variables);
     }
   }
 

@@ -1,4 +1,20 @@
+import { join } from "path";
 import { runRecipe } from "../../models/recipe/execute.js";
+
+export async function get(req, res) {
+  const recipe = req.params.recipe;
+
+  const __dirname = import.meta.dirname;
+  if (__dirname === undefined)
+    console.log("need node 20 or higher (and Express 5 or higher)");
+
+  var dataPath = global.config.data.path || join(__dirname, "../../..");
+
+  var directoryPath = join(dataPath, "examples", "json");
+  var fileName = join(directoryPath, recipe);
+
+  res.status(200).sendFile(fileName);
+}
 
 /**
  * POST /recipe/execute

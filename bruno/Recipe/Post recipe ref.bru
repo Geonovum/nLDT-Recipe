@@ -1,7 +1,7 @@
 meta {
   name: Post recipe ref
   type: http
-  seq: 5
+  seq: 4
 }
 
 post {
@@ -13,9 +13,15 @@ post {
 body:json {
   {
     "type": "recipe-ref",
-    "recipe": "https://raw.githubusercontent.com/Geonovum/nLDT-Recipe/refs/heads/main/examples/json/calculate.json",
+    "recipe": "http://localhost:8081/geonovum/v1/recipes/calculate2.json",
     "variables": {
-      "magicNumber": 4
+      "magicNumber": 3,
+      "magicLink": {
+              "rel": "process",
+              "title": "multiply",
+              "type": "application/process+json",
+              "href": "http://192.168.2.124:8080/geonovum/v1/processes/multiply"
+            }
     }
   }
 }
