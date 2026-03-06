@@ -1,4 +1,4 @@
-# nLDT-Recipe
+# nLDT-Recipe specification
 nLDT Recipe
 
 # Dependencies
