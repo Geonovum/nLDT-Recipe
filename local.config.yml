@@ -1,6 +1,6 @@
 ---
 server:
-  id: geonovum
+  id: oven
   port: 8081
   limit: 10
   viewEngine: pug

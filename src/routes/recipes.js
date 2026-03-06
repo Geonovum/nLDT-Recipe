@@ -1,8 +1,8 @@
 import express from "express";
 
 import { asyncHandler } from "../middlewares/asyncHandler.js";
-import { post as postRecipe, get as getRecipe } from "../controllers/recipe/execute.js";
-import { post as postRecipeRef } from "../controllers/recipe/executeRef.js";
+import { post as postRecipe, get as getRecipe } from "../controllers/recipe/bake.js";
+import { post as postRecipeRef } from "../controllers/recipe/bakeRef.js";
 
 /**
  * Routes for recipe execution.
@@ -12,8 +12,9 @@ import { post as postRecipeRef } from "../controllers/recipe/executeRef.js";
  */
 const router = express.Router();
 
-router.post("/execute", asyncHandler(postRecipe));
-router.post("/executeref", asyncHandler(postRecipeRef));
+router.post("/bake", asyncHandler(postRecipe));
+router.post("/bakeref", asyncHandler(postRecipeRef));
+
 router.get("/recipes/:recipe", asyncHandler(getRecipe));
 
 export default router;

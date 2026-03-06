@@ -123,9 +123,9 @@
               }
             },
             "subscriber": {
-              "successUri": "http://localhost:8081/geonovum/v1/callback/:jobId?type=success",
-              "inProgressUri": "http://localhost:8081/geonovum/v1/callback/:jobId?type=inProgress",
-              "failedUri": "http://localhost:8081/geonovum/v1/callback/:jobId?type=failed"
+              "successUri": "http://localhost:8081/oven/v1/callback/:jobId?type=success",
+              "inProgressUri": "http://localhost:8081/oven/v1/callback/:jobId?type=inProgress",
+              "failedUri": "http://localhost:8081/oven/v1/callback/:jobId?type=failed"
             }
           }
         },
@@ -152,9 +152,9 @@
       ],
 
       "subscriber": {
-        "successUri": ":serviceUrl/callback/:jobId?type=success",
-        "inProgressUri": ":serviceUrl/callback/:jobId?type=inProgress",
-        "failedUri": ":serviceUrl/callback/:jobId?type=failed"
+        "successUri": ":serviceUrl/callback/:recipeId?type=success",
+        "inProgressUri": ":serviceUrl/callback/:recipeId?type=inProgress",
+        "failedUri": ":serviceUrl/callback/:recipeId?type=failed"
       }
     }
   ]

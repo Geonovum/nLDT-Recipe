@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-import { runRecipe } from "../../models/recipe/execute.js";
+import { runRecipe } from "../../models/recipe/bake.js";
 
 /**
  * POST /recipe/execute
