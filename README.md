@@ -7,4 +7,4 @@ Processes running on [ogc-api-kennissessie](https://github.com/Geonovum/ogc-api-
 
 Recipes are hosted on the [nLDT-AppStore](https://github.com/Geonovum/nLDT-AppStore)
 
-Execute your recipe in the [nLDT-Oven](https://github.com/Geonovum/nLDT-Oven)
+Execute your recipe in the [nLDT-Cook](https://github.com/Geonovum/nLDT-Cook)
